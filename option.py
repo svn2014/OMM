@@ -122,7 +122,7 @@ class Option(Security):
         orderdata =self._datavendor.queryorder(self.code)
         
         normalorder=None
-        if orderdata[0] == [None]:
+        if orderdata==None or orderdata[0] == [None]:
             pass
         else:
             #当前存在委托，筛选已报未成交委托
@@ -170,7 +170,10 @@ class Option(Security):
     #Test#
     def printme(self):
         Security.printme(self)
-        print('K=%f, T=%s, t=%s, life=%d' %(self.strikeprice, self.expirydate.strftime('%Y-%m-%d'), self.listeddate.strftime('%Y-%m-%d'),self.lifedays))
+        try:
+            print('K=%f, T=%s, t=%s, life=%d' %(self.strikeprice, self.expirydate.strftime('%Y-%m-%d'), self.listeddate.strftime('%Y-%m-%d'),self.lifedays))
+        except:
+            print('--------------------error here--------------------')
 #        print('D=%f, G=%f, V=%f, T=%f, R=%f' %(self.greeks.delta, self.greeks.gamma, self.greeks.vega, self.greeks.theta,self.greeks.rho))
         
      

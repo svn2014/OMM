@@ -2,6 +2,7 @@
 import gvar as g
 from vendors import VendorBase
 from WindPy import w
+import time
 
 """
 ----------------------------------------------
@@ -24,7 +25,8 @@ class VendorWind(VendorBase):
             print('打开Wind时异常')
     
         #启动交易帐户
-        self.tradelogon()
+        if VendorWind._tradeaccid[0]==0:
+            self.tradelogon()
         
     """
     ----------------------------------------------
@@ -34,8 +36,9 @@ class VendorWind(VendorBase):
     def getoptionset(self, underlying):
         dataset=None
         try:
+            today=time.strftime('%Y%m%d',time.localtime())
 #            print('loading %s' %(underlying))
-            options = w.wset("OptionChain","date=20140926;us_code="+underlying+";option_var=;month=全部;call_put=全部;field=option_code,option_name,strike_price,call_put,first_tradedate,last_tradedate,expiredate")
+            options = w.wset("OptionChain","date="+today+";us_code="+underlying+";option_var=;month=全部;call_put=全部;field=option_code,option_name,strike_price,call_put,first_tradedate,last_tradedate,expiredate")
             dataset=options.Data
             #期权类型需要转换：认购=c，认沽=p
             dataset[3]=[s.replace('认购','c').replace('认沽','p') for s in dataset[3]]
@@ -68,6 +71,7 @@ class VendorWind(VendorBase):
     def tradelogon(self):
         #仅登陆期权帐户
         if self._tradeaccid[0]>0:
+            print('已登陆')
             return
             
         acc=[g.config_wind_account+'03']
@@ -119,7 +123,8 @@ class VendorWind(VendorBase):
         dataset=None
         q = w.tquery(2, logonid=self._tradeaccid, windcode=code)
         if q.ErrorCode<0:
-            print(q.Data)
+            print(code)
+            print(q)
         else:
             dataset = q.Data
             

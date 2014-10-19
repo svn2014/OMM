@@ -42,8 +42,8 @@ class MarketMaker:
         print('======开始做市======')
         while(1):
             i+=1
-            if i%10==0:
-                print('>%s---Ctrl+C可以退出' %(i))
+            if i%1==0:
+                print('running>%s---Ctrl+C可以退出' %(i))
             
             for o in self.optionset:
                 self.checkorder(o)
