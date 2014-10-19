@@ -40,8 +40,11 @@ class MarketMaker:
             time.sleep(1)   #休眠5秒，等待订单簿数据
         
         print('======开始做市======')
-        for i in range(100):
-            print(i)
+        while(1):
+            i+=1
+            if i%10==0:
+                print('>%s---Ctrl+C可以退出' %(i))
+            
             for o in self.optionset:
                 self.checkorder(o)
                 time.sleep(g.config_marketmaker_sleep) #每做一次查询，休息一下

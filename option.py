@@ -34,17 +34,24 @@ class Option(Security):
     def __init__(self,code,exchange):
         self.sectype=Security.SecType.option
         self.desc='期权'
-#        Security.__init__(self,code,exchange)
         super(Option,self).__init__(code,exchange)
         
     """
     获取证券基础信息
-    """    
-    def getinfo(self):
+    """
+    def getalloptions(self, underlying):
         try:
             #如果之前没有加载过，则加载全部期权信息
             if Option.OPTIONSET == None:
-                Option.OPTIONSET=self._datavendor.getoptionset('510050.SH')
+                Option.OPTIONSET=self._datavendor.getoptionset(underlying)
+        except:
+            print('获取全部期权数据时异常')
+    
+    
+    def getinfo(self):
+        try:
+            #加载期权基础信息
+            self.getalloptions('510050.SH')
             
             #寻找当前匹配code
             codes=Option.OPTIONSET[0]
@@ -52,7 +59,7 @@ class Option(Security):
             if idx>=0:
                 self.name=Option.OPTIONSET[1][idx]
                 self.strikeprice=Option.OPTIONSET[2][idx]
-                self.listeddate=Option.OPTIONSET[4][idx]                
+                self.listeddate=Option.OPTIONSET[4][idx]
                 self.expirydate=Option.OPTIONSET[5][idx]
                 self.lifedays=Option.OPTIONSET[6][idx]
                 #option type
