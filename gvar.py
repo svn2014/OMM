@@ -49,4 +49,4 @@ Wind帐户信息
 """
 config_wind_account='w23205041'
 config_wind_password='000000'
-config_marketmaker_sleep=0.1
+config_marketmaker_sleep=0.02
