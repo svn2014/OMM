@@ -131,9 +131,26 @@ class Option(Security):
         
         if normalorder==None:
             #当前没有委托，查询持仓，如果没有持仓则下单
-#            print('没有委托，直接下单')
-            self._datavendor.sendorder(code, tradeside, price, volume)
-            pass
+            positiondata =self._datavendor.queryposition(self.code)
+            if positiondata == [] or positiondata==None:
+                #无持仓，直接下单
+                self._datavendor.sendorder(code, tradeside, price, volume)
+            else:
+                #检查持仓方向，如果反向则平仓
+#                print(positiondata)
+                positionside = positiondata[5][0]
+                if not self.comparetradeside(positionside,tradeside):
+                    #平仓
+                    if positionside.upper() == 'BUY':
+                        tradeside='sell'
+                    elif positionside.upper() == 'SHORT':
+                        tradeside='cover'
+                    else:
+                        pass
+                
+                #根据新方案交易
+                self._datavendor.sendorder(code, tradeside, price, volume)
+                
         else:
             #当前存在委托，筛选已报未成交委托
 #            normalorder=[i for i in range(len(orderdata[1])) if orderdata[1][i] == 'Normal']
@@ -154,6 +171,7 @@ class Option(Security):
                     else:
                         #委托已存在，不一致，则先撤单
 #                        print('同向委托不一致，撤单')
+#                        print(orderdata)
                         self._datavendor.cancelorder(orderno)
                         continue                        
                 else:

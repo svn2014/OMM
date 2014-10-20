@@ -77,12 +77,13 @@ class VendorWind(VendorBase):
         acc=[g.config_wind_account+'03']
         acctype=['sho']
         logon=w.tlogon('0000',0,acc,g.config_wind_password, acctype)
-        self._tradeaccid=logon.Data[0]
         
         if logon.ErrorCode <0:
+            self._tradeaccid=0            
             print('登陆失败：%s' %(logon.Data))
         else:
-            print('期权交易帐户登陆')
+            self._tradeaccid=logon.Data[0]
+            print('期权交易帐户登陆成功')
             
     def tradelogout(self):
         logout =w.tlogout(self._tradeaccid)
@@ -123,19 +124,18 @@ class VendorWind(VendorBase):
         dataset=None
         q = w.tquery(2, logonid=self._tradeaccid, windcode=code)
         if q.ErrorCode<0:
-            print(code)
-            print(q)
+            print('查询委托错误:%s' %(code))
         else:
             dataset = q.Data
             
         return dataset
     
     def queryposition(self, code):
-        pass
-    """
-    w.tquery(1, logonid=3, windcode='90000373.SH')
-.ErrorCode=0
-.Fields=['SecurityCode', 'SecurityName', 'SecurityForzen', 'CostPrice', 'LastPrice', 'TradeSide', 'EnableVolume', 'TodayOpenVolume', 'TotalFloatProfit', 'MoneyType', 'LogonID', 'ErrorCode', 'ErrorMsg']
-.Data=[['90000373.SH', '90000373.SH'], ['华夏上证50ETF期权1410认购1.50', '华夏上证50ETF期权1410认购1.50'], [0.0, 0.0], [0.1415, 0.1448], [0.1367, 0.1367], ['Buy', 'Short'], [79.0, 3.0], [79.0, 3.0], [0.0, 0.0], ['CNY', 'CNY'], [3, 3], [0, 0], ['', '']]
-
-    """
+        dataset=None
+        q = w.tquery(1, logonid=self._tradeaccid, windcode=code)
+        if q.ErrorCode<0:
+            print('查询成交错误:%s' %(code))
+        else:
+            dataset = q.Data
+            
+        return dataset
