@@ -47,8 +47,10 @@ class OrderBook:
         self.bidasksprdpct=-1
         if self.ask[0]==0:
             print('订单簿缺少卖1: %s' %(self.code))
+            print(ask)
         elif self.bid[0]==0:
             print('订单簿缺少买1: %s' %(self.code))
+            print(bid)
         else:
             self.bidasksprd=self.ask[0]-self.bid[0]
             self.bidasksprdpct=self.bidasksprd/self.bid[0]

@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import datetime
 from security import Security
 from gvar import enum
 
@@ -126,7 +125,7 @@ class Option(Security):
             pass
         else:
             #当前存在委托，筛选已报未成交委托
-            normalorder=[i for i in range(len(orderdata[1])) if orderdata[1][i] == 'Normal']
+            normalorder=[i for i in range(len(orderdata[1])) if orderdata[1][i] == 'Normal' and orderdata[17][i] == '已报']
             if len(normalorder)==0:
                 normalorder=None
         

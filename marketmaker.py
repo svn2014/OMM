@@ -14,7 +14,7 @@ class MarketMaker:
     optionset=[]
     
     def __init__(self):
-        name='未定义的做市商策略'
+        self.name='未定义的做市商策略'
 
     def add(self,codes):
         #options=['90000373.SH','90000374.SH',...]
@@ -66,13 +66,14 @@ class MarketMaker1(MarketMaker):
     """
     #参数
     c_spread_pct=0.02   #做市发出订单的价差百分比
-    c_min_spread=0.0025  #做市发出订单的价差最小值
+    c_min_spread=0.001  #做市发出订单的价差最小值
     c_trade_volume=5    #每次交易张数
     
     def __init__(self):
         self.name = '基于持仓的机械做市商策略'
                 
     def checkorder(self, option):
+        orderspread=option.orderbook.bidasksprd
         orderspreadpct=option.orderbook.bidasksprdpct
         pohlc=option.orderbook.pohlc
         
@@ -91,11 +92,11 @@ class MarketMaker1(MarketMaker):
             ask=baseprice*(1+self.c_spread_pct/2)
             bid=baseprice*(1-self.c_spread_pct/2)
 #            print('base=%f, ask=%f, bid=%f' %(baseprice, ask, bid))
-            if  (orderspreadpct>self.c_spread_pct and orderspreadpct>self.c_min_spread):
+            if  (orderspreadpct>self.c_spread_pct and orderspread>self.c_min_spread):
 #                print('send order %s: ask-%f, bid-%f' %(option.code, ask, bid))                
                 #不要采用向量下单
                 option.sendorder(option.code, 'short', ask, self.c_trade_volume)
                 option.sendorder(option.code, 'buy', bid, self.c_trade_volume)
             else:
-#                print('skip %s' %(option.code))
+#                print('跳过 %s' %(option.code))
                 pass

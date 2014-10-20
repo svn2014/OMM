@@ -15,6 +15,7 @@ optionSQJT=['10000509.SH', '10000510.SH', '10000511.SH', '10000512.SH', '1000051
 
 #在这里更换标的
 realtimeoption=option50etf
+#realtimeoption=['90000393.SH','90000373.SH']
 
 import marketmaker as mm
 maker =mm.MarketMaker1()

@@ -112,10 +112,10 @@ class VendorWind(VendorBase):
     def cancelorder(self, orderno):
         c=w.tcancel(orderno,logonid=self._tradeaccid)
         if c.ErrorCode<0:
-            print('撤单失败: %s' %(orderno))
+            print('撤单失败: 单号%s' %(orderno))
             return -1
         else:
-            print('>>>>>>>>>>撤单成功: %s' %(orderno))
+            print('>>>>>>>>>>撤单成功: 单号%s' %(orderno))
             return 0
     
     def queryorder(self, code):
@@ -132,3 +132,10 @@ class VendorWind(VendorBase):
     
     def queryposition(self, code):
         pass
+    """
+    w.tquery(1, logonid=3, windcode='90000373.SH')
+.ErrorCode=0
+.Fields=['SecurityCode', 'SecurityName', 'SecurityForzen', 'CostPrice', 'LastPrice', 'TradeSide', 'EnableVolume', 'TodayOpenVolume', 'TotalFloatProfit', 'MoneyType', 'LogonID', 'ErrorCode', 'ErrorMsg']
+.Data=[['90000373.SH', '90000373.SH'], ['华夏上证50ETF期权1410认购1.50', '华夏上证50ETF期权1410认购1.50'], [0.0, 0.0], [0.1415, 0.1448], [0.1367, 0.1367], ['Buy', 'Short'], [79.0, 3.0], [79.0, 3.0], [0.0, 0.0], ['CNY', 'CNY'], [3, 3], [0, 0], ['', '']]
+
+    """
